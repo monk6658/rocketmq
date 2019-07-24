@@ -12,6 +12,7 @@ package com.rocketmqsystem.consumer;
 import com.rocketmqsystem.constants.RocketMQErrorEnum;
 import com.rocketmqsystem.exception.RocketMQException;
 import com.rocketmqsystem.util.RunTimeUtil;
+import com.rocketmqsystem.util.RunningData;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.slf4j.Logger;
@@ -44,9 +45,11 @@ public class MQConsumerConfiguration {
     private MQConsumeMsgListenerProcessor mqMessageListenerProcessor;
 
     /**
-     *
-     * @return
+     * 自动启动消费者监听
+     * @author zxl
+     * @return 消费者
      * @throws RocketMQException
+     * @time 2019-7-24 19:00:12
      */
     @PostConstruct
     public DefaultMQPushConsumer getRocketMQConsumer() throws RocketMQException {
@@ -66,7 +69,6 @@ public class MQConsumerConfiguration {
         consumer.setConsumeThreadMin(consumeThreadMin);
         consumer.setConsumeThreadMax(consumeThreadMax);
         consumer.registerMessageListener(mqMessageListenerProcessor);
-        consumer.setInstanceName(RunTimeUtil.getRocketMqUniqeInstanceName());
         /**
          * 设置Consumer第一次启动是从队列头部开始消费还是队列尾部开始消费
          * 如果非第一次启动，那么按照上次消费的位置继续消费
@@ -90,9 +92,9 @@ public class MQConsumerConfiguration {
         	String[] topicTagsArr = topics.split(";");
         	for (String topicTags : topicTagsArr) {
         		String[] topicTag = topicTags.split("~");
+                System.out.println(topicTag[0] + " " + topicTag[1]);
         		consumer.subscribe(topicTag[0],topicTag[1]);
 			}
-            //consumer.subscribe(topics, "*");
             //consumer.subscribe(topics,"*");
 
             consumer.start();

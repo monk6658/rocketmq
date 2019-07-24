@@ -12,6 +12,7 @@ package com.rocketmqsystem.producer;
 import com.rocketmqsystem.constants.RocketMQErrorEnum;
 import com.rocketmqsystem.exception.RocketMQException;
 import com.rocketmqsystem.util.RunTimeUtil;
+import com.rocketmqsystem.util.RunningData;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.slf4j.Logger;
@@ -51,6 +52,13 @@ public class MQProducerConfiguration {
     @Value("${rocketmq.producer.retryTimesWhenSendFailed}")
     private Integer retryTimesWhenSendFailed;
 
+    /**
+     * 生产者初始化配置
+     * @author zxl
+     * @return bean注入对象
+     * @throws RocketMQException
+     * @time 2019-7-24 19:00:12
+     */
     @Bean
     public DefaultMQProducer getRocketMQProducer() throws RocketMQException {
 
@@ -70,7 +78,6 @@ public class MQProducerConfiguration {
 
         //如果需要同一个jvm中不同的producer往不同的mq集群发送消息，需要设置不同的instanceName
         //producer.setInstanceName(instanceName);
-        producer.setInstanceName(RunTimeUtil.getRocketMqUniqeInstanceName());
 
         if(this.maxMessageSize!=null){
             producer.setMaxMessageSize(this.maxMessageSize);
@@ -94,9 +101,7 @@ public class MQProducerConfiguration {
             throw new RocketMQException(e);
         }
         return producer;
-
     }
-
 
 }
 
