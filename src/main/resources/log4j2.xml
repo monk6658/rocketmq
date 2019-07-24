@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<ThresholdFilter level="WARN" onMatch="ACCEPT"
+				onMismatch="DENY"  />
+			<PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+		</Console>
+		<RollingFile name="dealFile" fileName="D:\code\workspace2019\rocketmq-system\log\normal\HF.log"
+			filePattern="/log/normal/$${date:yyyy-MM-dd}/HF-%d{MM-dd-yyyy}-%i.gz">
+			<PatternLayout pattern="[Time]\:[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %n%msg%n%n" />
+			<SizeBasedTriggeringPolicy size="5MB" />
+			<DefaultRolloverStrategy max="300" />
+			<charset>UTF-8</charset>
+		</RollingFile>
+		<RollingFile name="initFile" fileName="/log/init/HF.log"
+			filePattern="/log/init/$${date:yyyy-MM-dd}/HF-%d{MM-dd-yyyy}-%i.gz">
+			<PatternLayout pattern="[Time]\:[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %n%msg%n%n" />
+			<SizeBasedTriggeringPolicy size="5MB" />
+			<DefaultRolloverStrategy max="300" />
+			<charset>UTF-8</charset>
+		</RollingFile>
+		<RollingFile name="pushMsgFile" fileName="/log/pushMessage/HF.log"
+			filePattern="log/pushMessage/$${date:yyyy-MM-dd}/HF-%d{MM-dd-yyyy}-%i.gz">
+			<PatternLayout pattern="[Time]\:[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %n%msg%n%n" />
+			<SizeBasedTriggeringPolicy size="5MB" />
+			<DefaultRolloverStrategy max="300" />
+			<charset>UTF-8</charset>
+		</RollingFile>
+		<RollingFile name="sysError" fileName="/log/error/HF.log"
+			filePattern="log/error/$${date:yyyy-MM-dd}/HF-%d{MM-dd-yyyy}-%i.gz">
+			<PatternLayout pattern="[Time]\:[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %n%msg%n%n" />
+			<SizeBasedTriggeringPolicy size="5MB" />
+			<DefaultRolloverStrategy max="300" />
+			<charset>UTF-8</charset>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<AsyncLogger name="sysPack" level="info" includeLocation="false">
+			<AppenderRef ref="sysError" />
+		</AsyncLogger>
+		<AsyncLogger name="dealPack" level="info" includeLocation="false">
+			<AppenderRef ref="dealFile" />
+		</AsyncLogger>
+		<AsyncLogger name="pushMsgPack" level="info" includeLocation="false">
+			<AppenderRef ref="pushMsgFile" />
+		</AsyncLogger>
+		<AsyncLogger name="initPack" level="info"
+			includeLocation="false">
+			<AppenderRef ref="initFile" />
+		</AsyncLogger>
+		<root level="error">  
+            <appender-ref ref="Console" />  
+        </root> 
+	</loggers>
+</configuration>
